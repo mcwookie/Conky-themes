@@ -416,6 +416,38 @@ function draw_ram(cr,x_pos,y_pos, radius, r, g, b, transparency, gap_y_text)
 end
 
 
+
+----------------------------------------------------
+
+
+
+
+function fix_text(text)
+	if string.len(text) == 1 then
+		new_text = "0" .. text .. "%"
+		return new_text
+	else
+		new_text = text .. "%"
+		return new_text
+	end
+end
+
+function draw_circle(cr, pos_x, pos_y, radius, r_border, g_border, b_border, trans)
+	cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE)
+	cairo_set_source_rgba(cr, r_border,g_border,b_border,trans)
+	cairo_set_line_width(cr, 1)
+	cairo_arc(cr,pos_x,pos_y,radius,0*math.pi/180,360*math.pi/180)
+	cairo_fill(cr)
+end
+
+function draw_border(cr, pos_x, pos_y, radius, r_border, g_border, b_border, trans)
+	cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE)
+	cairo_set_source_rgba(cr, r_border,g_border,b_border,trans)
+	cairo_set_line_width(cr, 2)
+	cairo_arc(cr,pos_x,pos_y,radius,0*math.pi/180,360*math.pi/180)
+	cairo_stroke(cr)
+end
+
 function draw_weather_icon(cr, pos_x, pos_y, image_path, trans)
 	cairo_set_operator(cr, operator_transpose[mode])
 	local home = assert(io.popen("echo $HOME"))
@@ -434,6 +466,16 @@ function draw_weather_icon(cr, pos_x, pos_y, image_path, trans)
 	cairo_restore(cr)
 end
 
+function draw_weather_text(cr, pos_x, pos_y, r_text, g_text, b_text, trans, text, font_size, shift_x, shift_y)
+	cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE)
+	cairo_set_source_rgba(cr, r_text, g_text, b_text, trans)
+	ct = cairo_text_extents_t:create()
+	cairo_set_font_size(cr, font_size)
+	cairo_text_extents(cr,text,ct)
+	cairo_move_to(cr,pos_x-ct.width/2+shift_x,pos_y+ct.height/2+shift_y)
+	cairo_show_text(cr,text)
+	cairo_close_path(cr)
+end
 
 function draw_weather(cr,x_pos,y_pos,r,g,b,transparency, gap_y_text)
 	cairo_set_operator(cr, operator_transpose[mode])
@@ -469,6 +511,7 @@ function draw_weather(cr,x_pos,y_pos,r,g,b,transparency, gap_y_text)
 
 end
 
+----------------------------------------------------
 
 function draw_function(cr)
 	local w,h=conky_window.width,conky_window.height	
@@ -522,6 +565,9 @@ function draw_function(cr)
 		draw_weather(cr,(start_rect_width_no_battery)+gap_x+gap_x_fix,gap_y+gap_y_fix, radius, r_WEATHER, g_WEATHER, b_WEATHER,transparency_WEATHER,gap_y_text)	
         
 
+
+			
+		
 	end	
 end
 
