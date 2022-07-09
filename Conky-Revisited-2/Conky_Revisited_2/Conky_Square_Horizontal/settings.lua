@@ -463,6 +463,15 @@ function draw_weather(cr,x_pos,y_pos,r,g,b,transparency, gap_y_text)
 	cairo_move_to(cr,x_pos+5,gap_y_text+y_pos+20)
 	cairo_show_text(cr, temperature .. "˚F")
 
+	----Feels Like
+	feels_like = conky_parse("${exec ~/.conky/Conky_Revisited_2/Conky_Square_Horizontal/openweather.py --feels_like_f --api_key " .. api_key .. " --city " .. "\"" .. city .. "\"" .. " --ccode " .. country_code .. "}")
+	cairo_set_operator(cr, operator_transpose[mode])
+	cairo_set_font_size(cr, 12)
+	cairo_move_to(cr,x_pos+5,gap_y_text+y_pos+40)
+	cairo_show_text(cr, "Feels like:")
+	cairo_move_to(cr,x_pos+20,gap_y_text+y_pos+55)
+	cairo_show_text(cr, feels_like .. "˚F")
+
   ----Draw weathor icon
   	image_path = conky_parse("${exec ~/.conky/Conky_Revisited_2/Conky_Square_Horizontal/openweather.py --get_weather_icon --api_key " .. api_key .. " --city " .. "\"" .. city .. "\"" .. " --ccode " .. country_code .. "}")
   	---draw_weather_icon(cr, x_pos+5, gap_y_text+y_pos+50, image_path, transparency)	

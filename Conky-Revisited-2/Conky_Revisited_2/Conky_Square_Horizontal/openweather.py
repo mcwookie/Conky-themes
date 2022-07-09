@@ -19,6 +19,10 @@ def process(args):
         temp = weather_values.temperature(unit='fahrenheit')['temp']
         temp = round(int(temp))
         print(temp)
+    if args.feels_like_f:
+        temp = weather_values.temperature(unit='fahrenheit').get('feels_like', None)
+        temp = round(int(temp))
+        print(temp)        
     if args.get_weather_icon:
         print(weather_values.weather_icon_name)
 
@@ -29,6 +33,7 @@ parser.add_argument('--city',help='Cityname.',nargs=1,metavar=('[city]'), requir
 parser.add_argument('--ccode',help='Country code.',nargs=1,metavar=('[code]'), required=True)
 parser.add_argument('--get_temp_c',help='Get temperature in Celsius.',action='store_true')
 parser.add_argument('--get_temp_f',help='Get temperature in Fahrenheit.',action='store_true')
+parser.add_argument('--feels_like_f',help='Get what the temperature feels like in Fahrenheit.',action='store_true')
 parser.add_argument('--get_weather_icon',help='Get weather icon.',action='store_true')
 args = parser.parse_args()
 
