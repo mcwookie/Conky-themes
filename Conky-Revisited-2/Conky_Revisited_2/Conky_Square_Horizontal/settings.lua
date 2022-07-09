@@ -11,6 +11,7 @@ HTML_color_drive_2 = "#FFFFFF"
 HTML_background_CPU = "#FFFFFF"
 HTML_color_RAM = "#FFFFFF"
 HTML_color_WEATHER = "#FFFFFF"
+HTML_color_TIME_DATE = "#FFFFFF"
 HTML_color_BORDER = "#FFFFFF"
 HTML_color_circle = "#FFFFFF"
 transparency_battery = 0.6
@@ -19,6 +20,7 @@ transparency_drive_2 = 0.6
 transparency_CPU = 0.6
 transparency_RAM = 0.6
 transparency_WEATHER = 0.6
+transparency_TIME_DATE = 0.6
 transparency_border = 0.1
 
 --[[
@@ -133,6 +135,7 @@ r_battery, g_battery, b_battery = hex2rgb(HTML_color_battery)
 r_CPU, g_CPU, b_CPU = hex2rgb(HTML_background_CPU)
 r_RAM, g_RAM, b_RAM = hex2rgb(HTML_color_RAM)
 r_WEATHER, g_WEATHER, b_WEATHER = hex2rgb(HTML_color_WEATHER)
+r_TIME_DATE, g_TIME_DATE, b_TIME_DATE = hex2rgb(HTML_color_TIME_DATE)
 
 r_circle, g_circle, b_circle = hex2rgb(HTML_color_circle)
 r_text, g_text, b_text = hex2rgb(HTML_text)
@@ -449,13 +452,6 @@ function draw_weather(cr,x_pos,y_pos,r,g,b,transparency, gap_y_text)
 	cairo_move_to(cr,x_pos+68+10,gap_y_text+y_pos+20)
 	cairo_show_text(cr, city)
 
-  ----Day
-  	day = conky_parse('${exec date +%A}')
-	cairo_set_operator(cr, operator_transpose[mode])
-	cairo_set_font_size(cr, 21)
-	cairo_move_to(cr,x_pos+68+10,gap_y_text+y_pos+50)
-	cairo_show_text(cr, day)
-
   ----Temperature
     temperature = conky_parse("${exec ~/.conky/Conky_Revisited_2/Conky_Square_Horizontal/openweather.py --get_temp_f --api_key " .. api_key .. " --city " .. "\"" .. city .. "\"" .. " --ccode " .. country_code .. "}")
 	cairo_set_operator(cr, operator_transpose[mode])
@@ -475,6 +471,27 @@ function draw_weather(cr,x_pos,y_pos,r,g,b,transparency, gap_y_text)
   ----Draw weathor icon
   	image_path = conky_parse("${exec ~/.conky/Conky_Revisited_2/Conky_Square_Horizontal/openweather.py --get_weather_icon --api_key " .. api_key .. " --city " .. "\"" .. city .. "\"" .. " --ccode " .. country_code .. "}")
   	---draw_weather_icon(cr, x_pos+5, gap_y_text+y_pos+50, image_path, transparency)	
+
+end
+
+function draw_time_date(cr,x_pos,y_pos,r,g,b,transparency, gap_y_text)
+	cairo_set_operator(cr, operator_transpose[mode])
+	cairo_set_source_rgba(cr,r,g,b,transparency)
+
+	multipler = 2/100	
+
+  --Draw text
+  ----Day
+  	time = conky_parse('${exec date "+%I:%M %p"}')
+	date = conky_parse('${exec date "+%A, %B %d %Y"}')
+	cairo_set_operator(cr, operator_transpose[mode])
+	cairo_set_font_size(cr, 40)
+	cairo_move_to(cr,x_pos+0,gap_y_text+y_pos+35)
+	cairo_show_text(cr, time)
+	cairo_set_font_size(cr, 15)
+	cairo_move_to(cr,x_pos+5,gap_y_text+y_pos+60)
+	cairo_show_text(cr, date)
+	
 
 end
 
@@ -512,7 +529,10 @@ function draw_function(cr)
 
 	else
 
-		
+	    draw_square(cr,(start_rect_width_no_battery)+gap_x_fix,gap_y_fix, start_rect_width, start_rect_height,r_TIME_DATE, g_TIME_DATE, b_TIME_DATE, transparency_TIME_DATE)
+		draw_time_date(cr,(start_rect_width_no_battery)+gap_x+gap_x_fix,gap_y+gap_y_fix, radius, r_TIME_DATE, g_TIME_DATE, b_TIME_DATE,transparency_TIME_DATE,gap_y_text)
+		start_rect_width_no_battery = start_rect_width_no_battery + gap_x_distance + 200
+
         for i=1,drives do
 			draw_square(cr,(start_rect_width_no_battery)+gap_x_fix,gap_y_fix, start_rect_width, start_rect_height,drive_colors[i][1], drive_colors[i][2], drive_colors[i][3], drive_colors[i][4])
 			draw_folder(cr,(start_rect_width_no_battery)+gap_x_fix,gap_y_fix,start_rect_height,drive_paths[i],drive_names[i],drive_colors[i][1], drive_colors[i][2], drive_colors[i][3], drive_colors[i][4],gap_y_text)
