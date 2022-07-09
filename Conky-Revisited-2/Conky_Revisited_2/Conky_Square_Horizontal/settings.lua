@@ -42,7 +42,7 @@ Modes:
 	1 = Show background area
 	2 = No background area
 ]]--
-mode = 1
+mode = 2
 
 -- Path of drives for free space status.
 drive_paths = {"/", "/run/timeshift/backup", "/media/bvogle/local_data1", "/media/bvogle/local_data_ssd1"}
@@ -66,7 +66,7 @@ border_size = 4
 gap_x_distance = 10
 
 -- ###Openweather settings###
-api_key = "97131a0652292b8ad3f95784d3a76e76"
+api_key = "XXXX"
 city = "Jenks"
 country_code = "US"
 -- ###Colors###
