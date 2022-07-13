@@ -47,10 +47,12 @@ Modes:
 mode = 2
 
 -- Path of drives for free space status.
-drive_paths = {"/", "/run/timeshift/backup", "/media/bvogle/local_data1", "/media/bvogle/local_data_ssd1"}
+---drive_paths = {"/", "/run/timeshift/backup", "/media/bvogle/local_data1", "/media/bvogle/local_data_ssd1"}
+drive_paths = {"/", "/media/bvogle/local_data1", "/media/bvogle/local_data2", "/media/bvogle/local_data_ssd1"}
 
 -- Names of drives for free space status.
-drive_names = {"Root", "Timeshift", "local_data1", "local_data_ssd1"}
+---drive_names = {"Root", "Timeshift", "local_data1", "local_data_ssd1"}
+drive_names = {"Root", "local_data1", "local_data2", "local_data_ssd1"}
 
 -- Number of drives to show free space status. Adjust the conky "height"-parameter in config manually to adjust for the increase in Conky height when adding more drives.
 drives = 2
@@ -68,7 +70,7 @@ border_size = 4
 gap_x_distance = 10
 
 -- ###Openweather settings###
-api_key = "XXXX"
+api_key = "ddedb6d0542bfb5c56dde6428e5f5334"
 city = "Jenks"
 country_code = "US"
 -- ###Colors###
@@ -419,7 +421,7 @@ function draw_ram(cr,x_pos,y_pos, radius, r, g, b, transparency, gap_y_text)
 end
 
 
-function draw_weather_icon(cr, pos_x, pos_y, image_path, trans)
+function draw_weather_icon(cr, pos_x, pos_y, image_path, transparency)
 	cairo_set_operator(cr, operator_transpose[mode])
 	local home = assert(io.popen("echo $HOME"))
 	local home = assert(home:read('*a'))
@@ -432,7 +434,7 @@ function draw_weather_icon(cr, pos_x, pos_y, image_path, trans)
 
 	cairo_save(cr)
 	cairo_set_source_surface (cr, image, pos_x-w_img/2, pos_y-h_img/2)
-	cairo_paint_with_alpha (cr, trans)
+	---cairo_paint_with_alpha (cr, transparency)
     cairo_surface_destroy (image)
 	cairo_restore(cr)
 end
@@ -470,7 +472,8 @@ function draw_weather(cr,x_pos,y_pos,r,g,b,transparency, gap_y_text)
 
   ----Draw weathor icon
   	image_path = conky_parse("${exec ~/.conky/Conky_Revisited_2/Conky_Square_Horizontal/openweather.py --get_weather_icon --api_key " .. api_key .. " --city " .. "\"" .. city .. "\"" .. " --ccode " .. country_code .. "}")
-  	---draw_weather_icon(cr, x_pos+5, gap_y_text+y_pos+50, image_path, transparency)	
+  	draw_weather_icon(cr, x_pos+5, gap_y_text+y_pos+50, image_path, transparency)	
+	
 
 end
 
