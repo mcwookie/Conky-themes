@@ -70,7 +70,7 @@ border_size = 4
 gap_x_distance = 10
 
 -- ###Openweather settings###
-api_key = "ddedb6d0542bfb5c56dde6428e5f5334"
+api_key = "XXX"
 city = "Jenks"
 country_code = "US"
 -- ###Colors###
